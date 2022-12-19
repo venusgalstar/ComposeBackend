@@ -1,7 +1,7 @@
 // var {config} = require('./config/config.js');
 import {config} from './config/config.js';
 // import * as web3 from './web3.js';
-// import * as database from './database.js';
+import * as database from './database.js';
 
 
 import express from 'express';
@@ -10,9 +10,10 @@ import bodyParser from 'body-parser';
 const router = express.Router();
 
 // init database
-// await database.initDB();
+await database.initDB();
 
-// web3.monitorContract();
+// start to monitor
+web3.monitorContract();
 
 var app = express();
 
@@ -24,22 +25,18 @@ app.get('/', (req, res)=>{
     res.send("Welcome to root URL of Server");
 });
 
-// app.get('/getWalletCount', async function (req, res){
+app.get('/getChainList', async function (req, res){
 
-//     // console.log(req.query);
+    var result = database.getChainList();
 
-//     var resultA = database.getWalletCount(web3.CurrentBlockNumber);
+    res.json(result);
+});
 
-//     res.json(resultA);
-// });
+app.get('/getNftList', async function (req, res){
 
-// app.get('/getTransactionInfo', async function (req, res){
+    var resultA = database.getNftList();
 
-//     // console.log(req.query);
-
-//     var resultA = database.getTransactionInfo(web3.CurrentBlockNumber);
-
-//     res.json(resultA);
-// });
+    res.json(resultA);
+});
 
 app.listen(config.PORT);

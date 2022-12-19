@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --experimental-json-modules index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon --experimental-json-modules index.js"
   },
   "dependencies": {
     "@dopex-io/sdk": "^1.0.0-beta.2",

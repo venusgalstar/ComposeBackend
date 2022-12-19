@@ -1,7 +1,6 @@
 import {config} from './config/config.js';
 import mysql from 'sync-mysql';
 
-var startNumber = config.START_BLOCKNUM;
 var DB;
 
 const initDB = () =>
@@ -25,3 +24,66 @@ const initDB = () =>
 }
 
 export{ initDB };
+
+const getChainList = () =>
+{
+    var res;
+
+    console.log("Trying to get blocknumber from database... \n");
+
+    try{
+        var query = "SELECT * FROM chain";
+        var result = DB.query(query);
+
+        res = result;
+    } catch(e)
+    {
+        console.log("Failed in getting blocknumber from database.\n", e);
+    }
+    return res;    
+}
+
+export{ getChainList };
+
+const getNftList = () =>
+{
+    var res;
+
+    console.log("Trying to get blocknumber from database... \n");
+
+    try{
+        var query = "SELECT * FROM nft";
+        var result = DB.query(query);
+
+        res = result;
+    } catch(e)
+    {
+        console.log("Failed in getting blocknumber from database.\n", e);
+    }
+    return res;    
+}
+
+export{ getNftList };
+
+const getLastBlockNumber = () =>
+{
+    var blockNumber;
+
+    console.log("Trying to get blocknumber from database... \n");
+
+    try{
+        var query = "SELECT startBlock FROM config";
+        var result = DB.query(query);
+
+        blockNumber = result[0]["startBlock"];
+        startNumber = blockNumber;
+        
+        console.log(startNumber);
+    } catch(e)
+    {
+        console.log("Failed in getting blocknumber from database.\n", e);
+    }
+    return startNumber;    
+}
+
+export{ getLastBlockNumber };
