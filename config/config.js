@@ -1,10 +1,10 @@
 
-import abiContract from './nftABI.json';
+import abiContract from './nftABI.json' assert {type: 'json'};
 
 var config = {
     "HOST"      : "127.0.0.1",
     "USER"      : "root",
-    "PASSWORD"  : "password",
+    "PASSWORD"  : "",
     "DATABASE"  : "compose",
     "PORT"      : 9000,
     "ABI"       : abiContract,

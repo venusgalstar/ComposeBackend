@@ -1,6 +1,6 @@
 // var {config} = require('./config/config.js');
 import {config} from './config/config.js';
-// import * as web3 from './web3.js';
+import * as web3 from './web3.js';
 import * as database from './database.js';
 
 
@@ -13,7 +13,7 @@ const router = express.Router();
 await database.initDB();
 
 // start to monitor
-web3.monitorContract();
+// web3.monitorContract();
 
 var app = express();
 
