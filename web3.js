@@ -10,8 +10,6 @@ const monitorContract = async() =>{
 
         var idx = 0;
 
-        // console.log(chainList[0]["rpc"]);
-
         for( idx = 0; idx < nftList.length; idx++ ){
 
             var rpc = chainList[nftList[idx].chain_id - 1].rpc;
@@ -26,6 +24,8 @@ const monitorContract = async() =>{
 
             var endBlockNum = currentBlockNumber;
 
+            var currentIdx = idx;
+
             if( currentBlockNumber > startBlockNum + 2000 )
                 endBlockNum = startBlockNum + 2000;
 
@@ -34,9 +34,9 @@ const monitorContract = async() =>{
                 toBlock: endBlockNum,
             }, function(error, event){
     
-                console.log("from: ", startBlockNum, endBlockNum, typeof event);
+                console.log("from: ", startBlockNum, endBlockNum, nftList[currentIdx].chain_id);
                 
-                // database.updateLastBlockNumber(endBlockNum);
+                database.updateLastBlockNumber(endBlockNum, nftList[currentIdx].id);
     
                 if( event == undefined || event == null ){
                     return;
@@ -51,13 +51,15 @@ const monitorContract = async() =>{
                 console.log("new event", count);
                 var idx;
                 var transactionList = [];
-    
+   
+                console.log("event", event);
+
                 for( idx = 0; idx < count; idx++ ){
                     var transaction = [];
                     transaction["timestamp"] = event[idx].blockNumber;
-                    transaction["wallet_address"] = event[idx].returnValues[0];
-                    // transaction["to_address"] = event[idx].returnValues[1];
-                    transaction["busd_amount"] = event[idx].returnValues[3] / 1e18;
+                    transaction["from"] = event[idx].returnValues[0];
+                    transaction["to"] = event[idx].returnValues[1];
+                    transaction["id"] = event[idx].returnValues[2] ;
                     transaction["transaction_hash"] = event[idx].transactionHash;
                     transactionList.push(transaction);
                 }

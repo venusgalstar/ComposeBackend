@@ -87,3 +87,18 @@ const getLastBlockNumber = () =>
 }
 
 export{ getLastBlockNumber };
+
+const updateLastBlockNumber = (blockNumber, nftId) =>
+{
+    console.log("Trying to update blocknumber from database... \n");
+
+    try{
+        var query = "UPDATE nft SET block_num = "+ blockNumber + " WHERE id ="+nftId;
+        var result = DB.query(query);
+    } catch(e)
+    {
+        console.log("Failed in update blockNumber to database.\n", e);
+    } 
+}
+
+export{ updateLastBlockNumber };
