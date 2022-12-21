@@ -29,7 +29,7 @@ const getChainList = () =>
 {
     var res;
 
-    console.log("Trying to get blocknumber from database... \n");
+    console.log("Trying to ChainList from database... \n");
 
     try{
         var query = "SELECT * FROM chain";
@@ -49,7 +49,7 @@ const getNftList = () =>
 {
     var res;
 
-    console.log("Trying to get blocknumber from database... \n");
+    console.log("Trying to get NFTList from database... \n");
 
     try{
         var query = "SELECT * FROM nft";
