@@ -13,7 +13,7 @@ const router = express.Router();
 await database.initDB();
 
 // start to monitor
-// web3.monitorContract();
+web3.monitorContract();
 
 var app = express();
 
