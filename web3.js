@@ -2,6 +2,8 @@ import {config} from './config/config.js';
 import Web3 from "web3";
 import * as database from './database.js';
 
+//composed tx bank send pose1uekktqqhk45vl0h8s4t33pk2l7eksg2ergwua2 pose1nmh7qp0uk3zp4mj3me0x7fm5kcsqac9c2ch8gw 10pose -y
+
 const monitorContract = async() =>{
 
     try{
@@ -61,7 +63,10 @@ const monitorContract = async() =>{
                     transaction["to"] = event[idx].returnValues[1];
                     transaction["id"] = event[idx].returnValues[2] ;
                     transaction["transaction_hash"] = event[idx].transactionHash;
-                    transactionList.push(transaction);
+
+                    if( transaction["from"] != "0x0000000000000000000000000000000000000000" ){
+                        transactionList.push(transaction);
+                    }
                 }
     
                 console.log(transactionList);
