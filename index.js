@@ -1,19 +1,16 @@
-// var {config} = require('./config/config.js');
-import {config} from './config/config.js';
-import * as web3 from './web3.js';
-import * as database from './database.js';
+var {config} = require('./config/config.js');
+var {monitorContract} =require('./web3.js');
+var {initDB, getChainList, getNftList} =require('./database.js');
 
-
-import express from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-const router = express.Router();
+var express = require('express');
+var cors = require('cors');
+var bodyParser = require('body-parser');
 
 // init database
-await database.initDB();
+initDB();
 
 // start to monitor
-web3.monitorContract();
+monitorContract();
 
 var app = express();
 
@@ -27,14 +24,14 @@ app.get('/', (req, res)=>{
 
 app.get('/getChainList', async function (req, res){
 
-    var result = database.getChainList();
+    var result = getChainList();
 
     res.json(result);
 });
 
 app.get('/getNftList', async function (req, res){
 
-    var resultA = database.getNftList();
+    var resultA = getNftList();
 
     res.json(resultA);
 });
