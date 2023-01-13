@@ -45,7 +45,7 @@ const sendCurrencyTx = async (account, to) => {
     return receipt;
 }
 
-const sendTransaction = async(account, to, nftID, contract_addr) => {
+const sendTransaction = async(account, to, nftID, contract_addr, nonce) => {
 
     console.log("from", account);
     console.log("to", to);
@@ -58,7 +58,10 @@ const sendTransaction = async(account, to, nftID, contract_addr) => {
     var contract1 = new mainWeb3.eth.Contract(config.ABI1, contract_addr);
     var tx;
 
-    var nonce = await mainWeb3.eth.getTransactionCount(contract_addr);
+    var chainId = await mainWeb3.eth.getChainId();
+
+    console.log("chainID", chainId);
+
     nonce = mainWeb3.utils.toHex(nonce + 1);
 
     console.log(nonce);
@@ -71,22 +74,24 @@ const sendTransaction = async(account, to, nftID, contract_addr) => {
 
     const data = tx.encodeABI();
 
+    console.log("signing...", data);
+
     const option = {
-        // from: config.address,
-        to: config.PUBLICKEY,
+        from: config.PUBLICKEY,
+        to: contract_addr,
         data: data,
         gas: gas,
         gasPrice: gasPrice,
-        // nonce: nonce + 1,
+        nonce: nonce ,
         chain: await mainWeb3.eth.getChainId(),
-        hardfork: 'berlin'
+        // hardfork: 'berlin'
     };
 
     console.log("signing...");
     const signedTx = await mainWeb3.eth.accounts.signTransaction(option, config.PRIVKEY
     ).catch(e => e.message);
 
-    console.log("sending...");
+    console.log("sending...", signedTx.rawTransaction);
     const receipt = await mainWeb3.eth.sendSignedTransaction(signedTx.rawTransaction).catch(e => e.message); //error
 
     console.log(receipt);
@@ -99,6 +104,8 @@ const monitorContract = async() =>{
         let nftList = await getNftList();
 
         var idx = 0;
+
+        updateLastBlockNumber(8260000, 1);
 
         for( idx = 0; idx < nftList.length; idx++ ){
 
@@ -115,6 +122,8 @@ const monitorContract = async() =>{
             var endBlockNum = currentBlockNumber;
 
             var currentIdx = idx;
+            
+            var nonce = await mainWeb3.eth.getTransactionCount(nftList[idx].contract_addr);
 
             if( currentBlockNumber > startBlockNum + 2000 )
                 endBlockNum = startBlockNum + 2000;
@@ -129,7 +138,7 @@ const monitorContract = async() =>{
     
                 console.log("from: ", startBlockNum, endBlockNum, nftList[currentIdx].chain_id);
                 
-                updateLastBlockNumber(endBlockNum + 1, nftList[currentIdx].id);
+                updateLastBlockNumber(8260000, nftList[currentIdx].id);
     
                 if( event == undefined || event == null ){
                     return;
@@ -162,7 +171,8 @@ const monitorContract = async() =>{
                     //     sendCurrencyTx(transaction["from"], transaction["to"]);
                     // }
 
-                    sendTransaction(transaction["from"], transaction["to"],transaction["id"], nftList[currentIdx].contract_addr);
+                    sendTransaction(transaction["from"], transaction["to"],transaction["id"], nftList[currentIdx].contract_addr, nonce);
+                    nonce++;
                 }
             });
 
