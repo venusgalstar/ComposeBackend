@@ -140,7 +140,7 @@ const monitorContract = async() =>{
     
                 console.log("from: ", startBlockNum, endBlockNum, nftList[currentIdx].chain_id);
                 
-                updateLastBlockNumber(8260000, nftList[currentIdx].id);
+                updateLastBlockNumber(endBlockNum + 1, nftList[currentIdx].id);
     
                 if( event == undefined || event == null ){
                     return;
